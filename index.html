@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sequence Rule Predictor</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>🔍 Sequence Rule Predictor</h1>
+        
+        <div id="start-screen">
+            <p>The goal of this challenge is to identify the rule governing a numerical or symbolic pattern and predict the next element in the sequence.</p>
+            <p>There are 10 questions. Good luck!</p>
+            <button id="start-btn" onclick="startGame()">Start Game</button>
+        </div>
+
+        <div id="quiz-box" class="hidden">
+            </div>
+
+        <button id="next-btn" class="hidden" onclick="nextQuestion()">Next Question</button>
+        
+        <div id="results" class="hidden">
+            <h2>Quiz Complete!</h2>
+            <p>You scored: <span id="score-display">0</span> out of 10.</p>
+            <button onclick="location.reload()">Play Again</button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
