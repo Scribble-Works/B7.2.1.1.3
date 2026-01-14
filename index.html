@@ -17,7 +17,8 @@
         </div>
 
         <div id="quiz-box" class="hidden">
-            </div>
+            <!-- Questions will appear here -->
+        </div>
 
         <button id="next-btn" class="hidden" onclick="nextQuestion()">Next Question</button>
         
@@ -27,6 +28,10 @@
             <button onclick="location.reload()">Play Again</button>
         </div>
     </div>
+
+    <!-- 🔊 Sound Effects -->
+    <audio id="correct-sound" src="asset/brass-fanfare-reverberated-146263.mp3" preload="auto"></audio>
+    <audio id="wrong-sound" src="asset/cartoon-fail-trumpet-278822.mp3" preload="auto"></audio>
 
     <script src="script.js"></script>
 </body>

@@ -81,12 +81,25 @@ const quizBox = document.getElementById('quiz-box');
 const nextBtn = document.getElementById('next-btn');
 const resultsScreen = document.getElementById('results');
 
+// 🔊 SOUND HELPER FUNCTION
+function playSound(soundId) {
+    const sound = document.getElementById(soundId);
+    if (sound) {
+        sound.currentTime = 0;
+        sound.play().catch(() => {
+            // Ignore autoplay errors (safe after user interaction)
+        });
+    }
+}
+
 // --- Game Control Functions ---
 
 /**
  * Initializes the game by hiding the start screen and showing the quiz.
  */
 function startGame() {
+    currentQuestionIndex = 0;
+    score = 0;
     startScreen.classList.add('hidden');
     quizBox.classList.remove('hidden');
     nextBtn.classList.remove('hidden');
@@ -112,7 +125,6 @@ function displayQuestion() {
             <div class="options">
         `;
 
-        // Add option buttons
         q.options.forEach((option, index) => {
             questionHTML += `
                 <button onclick="checkAnswer(${index})" data-index="${index}">
@@ -129,8 +141,7 @@ function displayQuestion() {
 }
 
 /**
- * Checks the selected answer against the correct one and provides feedback.
- * @param {number} selectedIndex - The index of the button the user clicked.
+ * Checks the selected answer and provides feedback.
  */
 function checkAnswer(selectedIndex) {
     if (answered) return; 
@@ -141,27 +152,28 @@ function checkAnswer(selectedIndex) {
     
     const q = questions[currentQuestionIndex];
     const optionButtons = quizBox.querySelectorAll('.options button');
+    const isCorrect = selectedIndex === q.correctAnswerIndex;
 
-    // Disable all buttons and apply feedback classes
+    // Update score and play sound
+    if (isCorrect) {
+        score++;
+        playSound('correct-sound'); // ✅
+    } else {
+        playSound('wrong-sound'); // ❌
+    }
+
+    // Visual feedback
     optionButtons.forEach((btn, index) => {
         btn.disabled = true;
-
         if (index === selectedIndex) {
-            if (selectedIndex === q.correctAnswerIndex) {
-                btn.classList.add('correct');
-                score++;
-            } else {
-                btn.classList.add('incorrect');
-            }
+            btn.classList.add(isCorrect ? 'correct' : 'incorrect');
         }
-        
-        // Always highlight the correct answer if the user was wrong
-        if (index === q.correctAnswerIndex && selectedIndex !== q.correctAnswerIndex) {
-            btn.classList.add('correct');
+        if (index === q.correctAnswerIndex) {
+            btn.classList.add('correct-answer');
         }
     });
 
-    // Optionally display the rule after the user answers
+    // Show rule
     const ruleDisplay = document.createElement('p');
     ruleDisplay.innerHTML = `<strong>Rule:</strong> ${q.rule}`;
     quizBox.appendChild(ruleDisplay);
@@ -187,10 +199,6 @@ function nextQuestion() {
 function showResults() {
     quizBox.classList.add('hidden');
     nextBtn.classList.add('hidden');
-    
     document.getElementById('score-display').textContent = score;
     resultsScreen.classList.remove('hidden');
 }
-
-// NOTE: The game is now started via the 'startGame()' function called by the 'Start Game' button.
-// document.addEventListener('DOMContentLoaded', displayQuestion); // This is no longer needed.
